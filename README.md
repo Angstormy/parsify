@@ -38,24 +38,3 @@ The massive data vault that holds the underlying neural networks.
 - **Purpose:** Hosted on heavy-duty LFS (Large File System) servers that permit massive payloads (up to 50 GB free).
 **How it connects:** When the **API Space** wakes up from a cold-boot, the *first thing it does* is use `hf_hub_download()` to dynamically stream these optimized weights straight into its container RAM.
 **Why it's decoupled:** AI models are enormous. If you embedded them into the API Space, your server startup times would be brutal, and pushing Git commits would take ages. By separating them into a Vault, you only ever need to push weights once. If you train a better notebook in Colab tomorrow, you just drop the new `.pt` file here, and the server automatically begins using it on its next request.
----
-## Operational Commands
-To interact with each specific layer, use the following:
-### Updating the Frontend (UI)
-```bash
-# Push changes to Github (Triggers Vercel auto-deploy)
-cd frontend
-git add .
-git commit -m "Update UI"
-git push origin main
-```
-### Updating the Logic (Backend Server)
-```bash
-# Deploys api.py cleanly to your HF Space
-python deploy.py
-```
-### Updating the Weights (New Models)
-```bash
-# Only run this if you retrain your AI in Colab and have new .pt files!
-python deploy_models.py
-```
