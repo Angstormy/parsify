@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import axios from 'axios';
 import MainLayout from './components/layout/MainLayout';
 import PDFViewer from './components/features/PDFViewer';
 import ExtractedText from './components/features/ExtractedText';
@@ -9,6 +10,7 @@ import './styles/globals.css';
 
 function App() {
   const [activeSection, setActiveSection] = useState('ocr');
+  const [lang, setLang] = useState('auto');
   const {
     file,
     preview,
@@ -21,7 +23,7 @@ function App() {
     handleDrop,
     handleClear,
     handlePredict,
-  } = useOCR();
+  } = useOCR(lang);
 
   const renderSection = () => {
     switch (activeSection) {
@@ -29,10 +31,46 @@ function App() {
         return (
           <div className="max-w-7xl mx-auto">
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Hindi OCR Engine</h1>
+              <h1 className="text-2xl font-bold text-gray-900">THE ULTRA-PRECISION VISUAL AI ENGINE</h1>
               <p className="text-gray-500 mt-1">
-                Extract text from Hindi documents with ultra-precision
+                Extract text from English/Hindi documents with ultra-precision
               </p>
+            </div>
+
+            {/* Language Switcher */}
+            <div className="mb-6">
+              <div className="inline-flex bg-white border border-gray-200 rounded-xl p-1">
+                <button 
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    lang === 'auto' 
+                      ? 'bg-primary-600 text-white shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setLang('auto')}
+                >
+                  Auto
+                </button>
+                <button 
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    lang === 'hindi' 
+                      ? 'bg-primary-600 text-white shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setLang('hindi')}
+                >
+                  Hindi
+                </button>
+                <button 
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    lang === 'english' 
+                      ? 'bg-primary-600 text-white shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setLang('english')}
+                >
+                  English
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 h-[500px]">

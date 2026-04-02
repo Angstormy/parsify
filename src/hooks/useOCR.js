@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { apiService } from '../services/api';
 
-export function useOCR() {
+export function useOCR(lang) {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -46,16 +46,16 @@ export function useOCR() {
     setError('');
 
     try {
-      const data = await apiService.uploadFile(file);
+      const data = await apiService.uploadFile(file, lang);
       setPrediction(data.prediction);
-      setDebugImage(data.debug_image);
+      setDebugImage(data.engine_view);
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.detail || 'Failed to process image');
     } finally {
       setLoading(false);
     }
-  }, [file]);
+  }, [file, lang]);
 
   return {
     file,
