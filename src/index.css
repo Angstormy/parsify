@@ -98,6 +98,43 @@ h1 {
   text-transform: uppercase;
 }
 
+/* Language Switcher */
+.lang-switcher {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.4rem;
+  border-radius: 2rem;
+  border: 1px solid var(--glass-border);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.lang-pill {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0 !important;
+  width: auto !important;
+}
+
+.lang-pill.active {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.lang-pill:not(.active):hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
 /* Glassmorphism Card */
 .upload-card {
   background: var(--card-bg);
@@ -294,12 +331,31 @@ button {
   margin-bottom: 1rem;
 }
 
+.label-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .result-label {
   color: var(--accent);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 600;
+}
+
+.lang-badge {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .copy-btn {

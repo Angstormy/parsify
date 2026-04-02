@@ -8,6 +8,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [prediction, setPrediction] = useState('');
   const [error, setError] = useState('');
+  const [lang, setLang] = useState('auto');
+  const [detectedLang, setDetectedLang] = useState('');
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -49,11 +51,13 @@ function App() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('https://angstormy-hindi-ocr-api.hf.space/predict', formData, {
+      // Use the live Hugging Face Space API endpoint
+      const response = await axios.post(`https://angstormy-hindi-ocr-api.hf.space/predict?lang=${lang}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setPrediction(response.data.prediction);
-      setDebugImage(response.data.debug_image);
+      setDebugImage(response.data.engine_view);
+      setDetectedLang(response.data.detected_lang);
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.detail || 'Failed to process image');
@@ -72,6 +76,27 @@ function App() {
         <h1>Parsify<span className="dot">.</span></h1>
         <p className="subtitle">The Ultra-Precision Visual AI Engine</p>
       </header>
+
+      <div className="lang-switcher">
+        <button 
+          className={`lang-pill ${lang === 'auto' ? 'active' : ''}`}
+          onClick={() => setLang('auto')}
+        >
+          Auto
+        </button>
+        <button 
+          className={`lang-pill ${lang === 'hindi' ? 'active' : ''}`}
+          onClick={() => setLang('hindi')}
+        >
+          Hindi
+        </button>
+        <button 
+          className={`lang-pill ${lang === 'english' ? 'active' : ''}`}
+          onClick={() => setLang('english')}
+        >
+          English
+        </button>
+      </div>
 
       <div className="upload-card">
         <div 
@@ -134,7 +159,10 @@ function App() {
         {prediction && (
           <div className="result-card">
             <div className="result-header">
-              <span className="result-label">Extracted Output</span>
+              <div className="label-group">
+                <span className="result-label">Extracted Output</span>
+                {detectedLang && <span className="lang-badge">{detectedLang}</span>}
+              </div>
               <button className="copy-btn" onClick={() => navigator.clipboard.writeText(prediction)}>
                 Copy
               </button>
