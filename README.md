@@ -20,7 +20,7 @@ graph TD
 ## 1. The Interface: React Frontend (GitHub / Vercel)
 The presentation layer that the user interacts with. 
 - **Tech Stack:** React, Vite, Axios, Vanilla CSS (Glassmorphism).
-- **Location:** Typically deployed to **Vercel** or **Netlify** via GitHub.
+- **Location:**  Deployed to **Vercel** via GitHub.
 - **Purpose:** Handles extremely fast UI rendering, client-side interactions, file selection, and blasting image arrays over the internet securely to the AI API.
 **Why it's decoupled:** If you want to change button colors or add a new animation, you shouldn't have to reboot heavy Python AI engines or wait 5 minutes for a massive Docker container to spin up. Frontend deployments to Vercel happen in milliseconds.
 ---
