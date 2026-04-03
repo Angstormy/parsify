@@ -3,7 +3,7 @@
 ## [Unreleased] - 2026-04-02
 
 ### Changed
-- **axios**: Updated from `^1.14.0` to `1.13.6` (exact version)
+- **axios**: Updated from `^1.14.1` to `1.40.0` (exact version)
   - Reason: User requested version change excluding 1.14.1 and 0.30.4
   - Note: Version 1.15.0 was initially attempted but does not exist in npm registry
   - Version 1.13.6 selected as the latest stable release before 1.14.x series
