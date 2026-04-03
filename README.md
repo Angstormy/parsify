@@ -139,7 +139,7 @@ The project uses TailwindCSS v4 with the new `@import` syntax:
 
 ### Axios Version
 
-This project uses Axios version `1.13.6` (pinned). See [CHANGELOG.md](./CHANGELOG.md) for version history.
+This project uses Axios version `1.40.0` (pinned). See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ## Development
 
