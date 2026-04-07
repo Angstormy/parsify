@@ -5,7 +5,7 @@ import './App.css';
 
 // Dynamic API URL: Use Localhost for dev, Hugging Face for Production
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://127.0.0.1:8000'
+  ? 'http://127.0.0.1:7860'
   : 'https://angstormy-hindi-ocr-api.hf.space';
 
 function App() {

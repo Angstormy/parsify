@@ -231,6 +231,7 @@ header h1 {
 
 /* Glassmorphism Card */
 .upload-card {
+  position: relative;
   background: var(--card-bg);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
