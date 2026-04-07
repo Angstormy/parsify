@@ -1,6 +1,12 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
+import { useEffect } from 'react';
 import './App.css';
+
+// Dynamic API URL: Use Localhost for dev, Hugging Face for Production
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://127.0.0.1:8000'
+  : 'https://angstormy-hindi-ocr-api.hf.space';
 
 function App() {
   const [file, setFile] = useState(null);
@@ -8,9 +14,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [prediction, setPrediction] = useState('');
   const [error, setError] = useState('');
-  const [lang, setLang] = useState('auto');
+  const [lang, setLang] = useState('hindi');
   const [detectedLang, setDetectedLang] = useState('');
   const fileInputRef = useRef(null);
+
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -38,6 +45,29 @@ function App() {
   };
 
   const [debugImage, setDebugImage] = useState(null);
+  const [inferenceSteps, setInferenceSteps] = useState([]);
+  const [loaderMessage, setLoaderMessage] = useState('Initializing Engines...');
+
+  const statusMessages = [
+    'Initializing AI Experts...',
+    'Analyzing Vector Gradients...',
+    'Consulting Devanagari Master...',
+    'Auditing Lexicon Dictionary...',
+    'Finalizing Consensus...'
+  ];
+
+  useEffect(() => {
+    let interval;
+    if (loading) {
+      let idx = 0;
+      setLoaderMessage(statusMessages[0]);
+      interval = setInterval(() => {
+        idx = (idx + 1) % statusMessages.length;
+        setLoaderMessage(statusMessages[idx]);
+      }, 2500);
+    }
+    return () => clearInterval(interval);
+  }, [loading]);
 
   const handlePredict = async () => {
     if (!file) return;
@@ -45,19 +75,20 @@ function App() {
     setLoading(true);
     setPrediction('');
     setDebugImage(null);
+    setInferenceSteps([]);
     setError('');
 
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-      // Use the live Hugging Face Space API endpoint
-      const response = await axios.post(`https://angstormy-hindi-ocr-api.hf.space/predict?lang=${lang}`, formData, {
+      const response = await axios.post(`${API_BASE}/predict?lang=${lang}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setPrediction(response.data.prediction);
       setDebugImage(response.data.engine_view);
       setDetectedLang(response.data.detected_lang);
+      setInferenceSteps(response.data.inference_steps || []);
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.detail || 'Failed to process image');
@@ -66,24 +97,33 @@ function App() {
     }
   };
 
+  const getConfColor = (conf) => {
+    if (conf > 0.8) return '#10b981'; // Emerald
+    if (conf > 0.4) return '#f59e0b'; // Amber
+    return '#ef4444'; // Red
+  };
+
   return (
     <div className="app-container">
+
       {/* Dynamic Background Elements */}
       <div className="bg-glow object-1"></div>
       <div className="bg-glow object-2"></div>
+      <div className="bg-glow object-3"></div>
+      <div className="grid-overlay"></div>
 
-      <header>
-        <h1>Parsify<span className="dot">.</span></h1>
+
+      <header className="brand-header">
+        <div className="logo-container">
+          <div className="logo-glow"></div>
+          <img src="/logo.png" alt="Parsify Logo" className="brand-logo" />
+          <h1>Parsify<span className="dot">.</span></h1>
+        </div>
         <p className="subtitle">The Ultra-Precision Visual AI Engine</p>
       </header>
 
+
       <div className="lang-switcher">
-        <button 
-          className={`lang-pill ${lang === 'auto' ? 'active' : ''}`}
-          onClick={() => setLang('auto')}
-        >
-          Auto
-        </button>
         <button 
           className={`lang-pill ${lang === 'hindi' ? 'active' : ''}`}
           onClick={() => setLang('hindi')}
@@ -114,13 +154,23 @@ function App() {
           />
           {!preview ? (
             <div className="empty-state">
-              <span className="icon">✦</span>
+              <div className="empty-glow"></div>
+              <span className="icon">✧</span>
               <p className="primary-text">Drag & drop or <strong>browse</strong></p>
               <p className="subtext">Supports high-res JPG, PNG, WEBP</p>
             </div>
+
           ) : (
             <div className="preview-container">
-              <img src={preview} alt="Selected" className="preview-img" />
+              <div className={`scanning-container ${loading ? 'active' : ''}`}>
+                <img src={preview} alt="Selected" className="preview-img" />
+                {loading && (
+                  <>
+                    <div className="scanning-beam"></div>
+                    <div className="scanning-glow"></div>
+                  </>
+                )}
+              </div>
               <div className="file-chip">
                 <span className="filename">{file.name}</span>
               </div>
@@ -135,14 +185,28 @@ function App() {
           disabled={!file || loading}
           className={loading ? 'loading-btn' : 'action-btn'}
         >
-          {loading ? (
-            <span className="btn-content">
-              <div className="mini-spinner"></div> Analyzing Vectors...
-            </span>
-          ) : (
-            'Parse Text'
-          )}
+          {loading ? 'Analyzing...' : 'Parse Text'}
         </button>
+
+        {loading && (
+          <div className="loader-overlay">
+            <div className="apple-aura">
+              <div className="aura-disk disk-1"></div>
+              <div className="aura-disk disk-2"></div>
+              <div className="aura-disk disk-3"></div>
+            </div>
+            <div className="frost-card">
+              <div className="loader-logo-container">
+                <img src="/logo.png" className="loader-logo-pulsar" alt="Parsify Loading" />
+                <div className="loader-logo-glow"></div>
+              </div>
+              <div className="loader-text-group">
+                <p className="loader-status">{loaderMessage}</p>
+                <p className="loader-sub">Parsify Intelligence Engine</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {debugImage && (
           <div className="debug-container">
@@ -168,6 +232,32 @@ function App() {
               </button>
             </div>
             <div className="prediction-text">{prediction}</div>
+          </div>
+        )}
+
+        {inferenceSteps.length > 0 && (
+          <div className="diagnostic-container">
+            <div className="debug-header" style={{ marginTop: '2rem' }}>
+              <span className="pulse-dot" style={{ backgroundColor: 'var(--secondary)', boxShadow: '0 0 10px var(--secondary)' }}></span>
+              <p className="subtext">Vector Diagnostic Matrix</p>
+            </div>
+            <div className="diagnostic-scroll">
+              {inferenceSteps.map((step, sIdx) => (
+                <div key={sIdx} className="diagnostic-step">
+                  <div className="step-num">S{step.step}</div>
+                  <div className="candidate-list">
+                    {step.top_candidates.map((cand, cIdx) => (
+                      <div key={cIdx} className="candidate-pill" style={{ borderColor: cIdx === 0 ? getConfColor(cand.confidence) : 'transparent' }}>
+                        <span className="cand-char">{cand.char === '<eos>' ? '⌁' : cand.char}</span>
+                        <span className="cand-conf" style={{ color: getConfColor(cand.confidence) }}>
+                          {Math.round(cand.confidence * 100)}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
