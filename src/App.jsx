@@ -242,19 +242,24 @@ function App() {
               <p className="subtext">Vector Diagnostic Matrix</p>
             </div>
             <div className="diagnostic-scroll">
-              {inferenceSteps.map((step, sIdx) => (
-                <div key={sIdx} className="diagnostic-step">
-                  <div className="step-num">S{step.step}</div>
-                  <div className="candidate-list">
-                    {step.top_candidates.map((cand, cIdx) => (
-                      <div key={cIdx} className="candidate-pill" style={{ borderColor: cIdx === 0 ? getConfColor(cand.confidence) : 'transparent' }}>
-                        <span className="cand-char">{cand.char === '<eos>' ? '⌁' : cand.char}</span>
-                        <span className="cand-conf" style={{ color: getConfColor(cand.confidence) }}>
-                          {Math.round(cand.confidence * 100)}%
-                        </span>
+              {inferenceSteps.map((wordObj, wIdx) => (
+                <div key={wIdx} className="diagnostic-word-group" style={{ marginBottom: '1rem' }}>
+                  <div className="word-label" style={{ color: 'var(--textSecondary)', fontSize: '0.8rem', paddingBottom: '0.5rem' }}>WORD: {wordObj.word}</div>
+                  {wordObj.steps && wordObj.steps.map((step, sIdx) => (
+                    <div key={`${wIdx}-${sIdx}`} className="diagnostic-step">
+                      <div className="step-num">S{step.step}</div>
+                      <div className="candidate-list">
+                        {step.top_candidates && step.top_candidates.map((cand, cIdx) => (
+                          <div key={cIdx} className="candidate-pill" style={{ borderColor: cIdx === 0 ? getConfColor(cand.confidence) : 'transparent' }}>
+                            <span className="cand-char">{cand.char === '<eos>' ? '⌁' : cand.char}</span>
+                            <span className="cand-conf" style={{ color: getConfColor(cand.confidence) }}>
+                              {Math.round(cand.confidence * 100)}%
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
