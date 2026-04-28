@@ -1,32 +1,40 @@
 import { 
-  FileText, 
-  BarChart3, 
-  MessageSquare, 
-  Sparkles, 
-  Settings, 
-  Search
+  Home, 
+  Info, 
+  Users, 
+  Search,
+  X
 } from 'lucide-react';
 import logo from '../../assets/Parsify.png';
 
 const menuItems = [
-  { id: 'ocr', icon: FileText, label: 'Summarization' },
-  { id: 'sentiment', icon: MessageSquare, label: 'Sentiment Analysis' },
-  { id: 'mepotina', icon: BarChart3, label: 'MepotinaTone' },
-  { id: 'advanced', icon: Sparkles, label: 'Advanced' },
-  { id: 'adanias', icon: Settings, label: 'Adanias' },
+  { id: 'home', icon: Home, label: 'HOME' },
+  { id: 'about', icon: Info, label: 'About' },
+  { id: 'team', icon: Users, label: 'Team Members' },
 ];
 
-export default function Sidebar({ activeSection, onSectionChange }) {
+export default function Sidebar({ activeSection, onSectionChange, isMobile, onClose }) {
   return (
     <aside className="w-72 bg-white border-r border-gray-200 h-full flex flex-col flex-shrink-0">
-      {/* Logo */}
+      {/* Logo - with close button on mobile */}
       <div className="p-6 border-b border-gray-100">
-        <div className="flex items-center justify-center">
-          <img 
-            src={logo} 
-            alt="Parsify" 
-            className="h-42 w-auto object-contain"
-          />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center flex-1">
+            <img 
+              src={logo} 
+              alt="Parsify" 
+              className="h-42 w-auto object-contain"
+            />
+          </div>
+          {isMobile && (
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors ml-2"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+          )}
         </div>
       </div>
 
