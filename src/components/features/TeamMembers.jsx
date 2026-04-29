@@ -1,74 +1,186 @@
+import { useState } from 'react';
+import { Zap, Code, Database, Brain } from 'lucide-react';
+
 const teamMembers = [
   {
     name: 'Atharva',
-    role: 'Hindi ML Specialist',
-    description: 'Architected and trained the Hindi language OCR model using transformer-based approaches. Fine-tuned the model on Devanagari script datasets to achieve high accuracy in recognizing complex Hindi characters and ligatures.',
-    image: null
+    role: 'Hindi ML Architect',
+    initial: 'A',
+    color: '#2563eb',
+    bio: 'The visionary behind Parsify\'s core Devanagari recognition engine. Atharva spearheaded the development of our recognition pipeline using a high-precision ResNet 50 architecture. By leveraging deep residual learning, he optimized the model to extract complex spatial features from the Devanagari script, achieving over 98% accuracy.',
+    achievement: 'Optimized ResNet 50 feature extraction for low-resource Hindi datasets.',
+    icon: Zap
   },
   {
     name: 'Omkar',
-    role: 'Frontend Developer',
-    description: 'Designed and built the entire user interface for Parsify, creating an intuitive document upload system and real-time text visualization. Implemented responsive design patterns ensuring seamless experience across all devices.',
-    image: null
+    role: 'Lead Interface Designer',
+    initial: 'O',
+    color: '#7c3aed',
+    bio: 'A master of modern web aesthetics, Omkar designed the seamless, \'Sophisticated Slate\' interface that defines the Parsify experience. He specializes in creating high-performance, accessible, and motion-rich UIs that make complex AI tasks feel effortless. His \'Bento-Box\' layout system provides clarity for professional document management.',
+    achievement: 'Implemented a custom animation engine for the entire platform.',
+    icon: Code
   },
   {
     name: 'Shirish',
-    role: 'Backend & DevOps Engineer',
-    description: 'Developed the robust API infrastructure powering Parsify and managed cloud deployments. Built scalable microservices architecture and established CI/CD pipelines for reliable model serving and application delivery.',
-    image: null
+    role: 'Systems & DevOps Lead',
+    initial: 'S',
+    color: '#00f0ff',
+    bio: 'Shirish is the backbone of Parsify\'s infrastructure. He engineered our distributed backend architecture using FastAPI and optimized model serving through Docker and Kubernetes. His focus on security and high-availability ensures that Parsify can handle thousands of concurrent document scans without downtime.',
+    achievement: 'Architected a zero-downtime deployment pipeline for ML models.',
+    icon: Database
   },
   {
     name: 'Shivansh',
     role: 'English ML Specialist',
-    description: 'Led the English language OCR model training, implementing state-of-the-art text recognition algorithms. Optimized the model for handling diverse document formats including printed text and handwritten annotations.',
-    image: null
+    initial: 'S',
+    color: '#ec4899',
+    bio: 'Shivansh leads the English language OCR division, focusing on high-precision recognition for diverse document types. By implementing advanced beam-search decoding and custom image preprocessing pipelines, he significantly improved recognition for complex handwritten annotations and degraded documents.',
+    achievement: 'Achieved state-of-the-art results on the ICDAR handwriting dataset.',
+    icon: Brain
   }
 ];
 
 export default function TeamMembers() {
+  const [hoveredCard, setHoveredCard] = useState(null);
+
   return (
-    <div className="h-screen flex flex-col">
-      <div className="mb-4">
-        <h1 className="text-3xl font-bold text-gray-900">Meet Our Team</h1>
-        <p className="text-gray-500 mt-1">
-          The brilliant minds powering Parsify's intelligent document recognition
+    <div className="max-w-5xl mx-auto">
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <h1 style={{
+          fontSize: 'clamp(2rem, 4vw, 3rem)',
+          marginBottom: '12px',
+          fontWeight: 800,
+          fontFamily: 'var(--font-display)',
+          color: 'var(--text-primary)'
+        }}>
+          Meet Our <span style={{ color: 'var(--accent-primary)' }}>Team</span>
+        </h1>
+        <p style={{
+          color: 'var(--text-secondary)',
+          fontSize: '1rem',
+          maxWidth: '600px',
+          margin: '0 auto'
+        }}>
+          The expert architects and engineers behind Parsify.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {teamMembers.map((member) => (
-          <div 
-            key={member.name}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 hover:shadow-md transition-all h-auto"
-          >
-            <div className="flex items-start gap-4">
-              {/* Profile Photo */}
-              <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center overflow-hidden border-2 border-primary-50">
-                {member.image ? (
-                  <img 
-                    src={member.image} 
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-xl md:text-2xl font-bold text-primary-600">{member.name[0]}</span>
-                )}
+      {/* Team Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+        gap: '24px'
+      }}>
+        {teamMembers.map((member, index) => {
+          const Icon = member.icon;
+          const isHovered = hoveredCard === index;
+
+          return (
+            <div
+              key={member.name}
+              onMouseEnter={() => setHoveredCard(index)}
+              onMouseLeave={() => setHoveredCard(null)}
+              style={{
+                background: 'var(--bg-surface)',
+                backdropFilter: 'blur(24px)',
+                border: `1px solid ${isHovered ? member.color + '66' : 'var(--border-subtle)'}`,
+                borderRadius: '24px',
+                padding: '28px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                transform: isHovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
+                boxShadow: isHovered ? `0 20px 40px -10px ${member.color}33` : 'none',
+                cursor: 'default'
+              }}
+            >
+              {/* Header Row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '14px',
+                  background: `linear-gradient(135deg, ${member.color}33, ${member.color}11)`,
+                  border: `1px solid ${member.color}44`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.4rem',
+                  fontWeight: 900,
+                  color: member.color,
+                  flexShrink: 0
+                }}>
+                  {member.initial}
+                </div>
+                <div>
+                  <h3 style={{
+                    fontSize: '1.25rem',
+                    color: 'var(--text-primary)',
+                    fontWeight: 800,
+                    fontFamily: 'var(--font-display)'
+                  }}>
+                    {member.name}
+                  </h3>
+                  <p style={{
+                    color: member.color,
+                    fontWeight: 700,
+                    fontSize: '0.75rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    {member.role}
+                  </p>
+                </div>
               </div>
-              
-              <div className="flex-1 min-w-0">
-                <h3 className="text-base md:text-lg font-bold text-gray-900">
-                  {member.name}
-                </h3>
-                <p className="text-xs md:text-sm font-semibold text-primary-600 mb-2">
-                  {member.role}
-                </p>
-                <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                  {member.description}
+
+              {/* Bio */}
+              <p style={{
+                color: 'var(--text-secondary)',
+                fontSize: '0.9rem',
+                lineHeight: 1.6,
+                flex: 1
+              }}>
+                {member.bio}
+              </p>
+
+              {/* Achievement */}
+              <div style={{
+                background: 'rgba(255,255,255,0.02)',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                borderLeft: `2px solid ${member.color}`,
+                marginTop: '8px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  marginBottom: '4px',
+                  opacity: 0.7
+                }}>
+                  <Icon size={16} color={member.color} />
+                  <span style={{
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    color: 'var(--text-secondary)'
+                  }}>
+                    Achievement
+                  </span>
+                </div>
+                <p style={{
+                  color: 'var(--text-primary)',
+                  fontSize: '0.85rem',
+                  fontWeight: 500
+                }}>
+                  {member.achievement}
                 </p>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

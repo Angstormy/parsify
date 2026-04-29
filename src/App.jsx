@@ -4,6 +4,7 @@ import MainLayout from './components/layout/MainLayout';
 import ComingSoon from './components/features/ComingSoon';
 import TeamMembers from './components/features/TeamMembers';
 import About from './components/features/About';
+import Docs from './components/features/Docs';
 import './styles/globals.css';
 
 // API URL - Using Hugging Face production API
@@ -11,6 +12,7 @@ const API_BASE = 'https://angstormy-hindi-ocr-api.hf.space';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
+  const [showEngine, setShowEngine] = useState(true); // Default to showing engine
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,6 +45,14 @@ function App() {
     }
     return () => clearInterval(interval);
   }, [loading]);
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('parsify-theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  }, []);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -106,21 +116,22 @@ function App() {
   const renderHomeSection = () => (
     <div className="max-w-7xl mx-auto">
       <div className="mb-4 lg:mb-6">
-        <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 leading-tight">TRANSFORMER BASED HANDWRITTEN TEXT RECOGNITION ENGINE</h1>
-        <p className="text-gray-500 mt-1 text-sm lg:text-base">
+        <h1 className="text-2xl lg:text-4xl font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>TRANSFORMER BASED HANDWRITTEN TEXT RECOGNITION ENGINE</h1>
+        <p className="mt-1 text-sm lg:text-base" style={{ color: 'var(--text-secondary)' }}>
           Extract text from English/Hindi documents
         </p>
       </div>
 
       {/* Language Switcher - English first, then Hindi */}
       <div className="mb-4 lg:mb-6">
-        <div className="inline-flex bg-white border border-gray-200 rounded-xl p-1">
+        <div className="inline-flex rounded-xl p-1" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)' }}>
           <button 
             className={`px-3 lg:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               lang === 'english' 
                 ? 'bg-primary-600 text-white shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                : 'hover:bg-primary-50/30'
             }`}
+            style={lang === 'english' ? {} : { color: 'var(--text-secondary)' }}
             onClick={() => setLang('english')}
           >
             English
@@ -129,8 +140,9 @@ function App() {
             className={`px-3 lg:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               lang === 'hindi' 
                 ? 'bg-primary-600 text-white shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                : 'hover:bg-primary-50/30'
             }`}
+            style={lang === 'hindi' ? {} : { color: 'var(--text-secondary)' }}
             onClick={() => setLang('hindi')}
           >
             Hindi
@@ -138,14 +150,15 @@ function App() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6 lg:mb-8 min-h-[400px] lg:min-h-[600px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-6 lg:mb-8 min-h-[300px] lg:min-h-[400px]">
         {/* Upload Section */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 flex flex-col h-full">
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">Original</h2>
-          <p className="text-sm text-gray-500 mb-4">Upload or drag your document</p>
+        <div className="rounded-2xl shadow-sm p-6 flex flex-col h-full" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)' }}>
+          <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>Original</h2>
+          <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>Upload or drag your document</p>
           
           <div 
-            className="flex-1 border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50/30 transition-all flex flex-col items-center justify-center min-h-[300px]"
+            className="flex-1 border-2 border-dashed rounded-xl p-6 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50/30 transition-all flex flex-col items-center justify-center min-h-[220px]"
+            style={{ borderColor: 'var(--border-subtle)' }}
             onClick={() => fileInputRef.current.click()}
             onDrop={onDrop}
             onDragOver={onDragOver}
@@ -159,15 +172,15 @@ function App() {
             />
             {!preview ? (
               <div className="py-8">
-                <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4" style={{ background: 'var(--bg-base)' }}>
                   <svg className="w-6 h-6 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                 </div>
-                <p className="text-sm font-medium text-gray-900 mb-1">
+                <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
                   Drop your file here or click to browse
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
                   Supports PDF, JPG, PNG, WEBP up to 10MB
                 </p>
               </div>
@@ -177,24 +190,24 @@ function App() {
                   <img 
                     src={preview} 
                     alt="Preview" 
-                    className="max-h-64 max-w-full object-contain rounded-lg" 
+                    className="max-h-40 max-w-full object-contain rounded-lg" 
                   />
                 </div>
-                <p className="text-sm text-gray-600 mt-4">{file.name}</p>
+                <p className="text-sm mt-4" style={{ color: 'var(--text-secondary)' }}>{file.name}</p>
               </div>
             )}
           </div>
 
           {error && (
-            <div className="mt-4 px-4 py-3 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="mt-4 px-4 py-3 rounded-xl" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+              <p className="text-sm" style={{ color: '#ef4444' }}>{error}</p>
             </div>
           )}
 
           <button 
             onClick={handlePredict} 
             disabled={!file || loading}
-            className={`w-full mt-auto pt-4 flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
+            className={`w-full mt-auto pt-6 flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-semibold transition-all ${
               !file 
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                 : loading
@@ -214,14 +227,14 @@ function App() {
         </div>
 
         {/* Results Section */}
-        <div className="bg-gradient-to-br from-primary-500 to-secondary-600 rounded-2xl shadow-lg p-6 text-white flex flex-col h-full">
+        <div className="bg-gradient-to-br from-primary-500 to-secondary-600 rounded-2xl shadow-lg p-6 text-white flex flex-col h-full max-h-[420px] lg:max-h-[520px]">
           <h2 className="text-lg font-semibold mb-1">Extracted Text</h2>
           <p className="text-sm text-white/70 mb-4">OCR results will appear here</p>
           
           {!prediction && !debugImage ? (
-            <div className="flex-1 flex flex-col items-center justify-center py-12 text-white/50">
-              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-4">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="flex-1 flex flex-col items-center justify-center py-4 text-white/50">
+              <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
@@ -231,14 +244,14 @@ function App() {
           ) : (
             <div className="flex-1 space-y-4 overflow-auto">
               {prediction && (
-                <div className="bg-white/10 rounded-xl p-6">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="bg-white/10 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-white/70 uppercase tracking-wide">Extracted Output</span>
                     {detectedLang && (
                       <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">{detectedLang}</span>
                     )}
                   </div>
-                  <pre className="text-white text-5xl font-bold whitespace-pre-wrap leading-relaxed">{prediction}</pre>
+                  <pre className="text-white text-3xl font-bold whitespace-pre-wrap leading-relaxed max-h-[150px] overflow-y-auto">{prediction}</pre>
                   <button 
                     onClick={() => navigator.clipboard.writeText(prediction)}
                     className="mt-4 flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm transition-colors"
@@ -275,43 +288,43 @@ function App() {
 
       {/* Engine Vision Matrix - Full Width */}
       {debugImage && (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="rounded-2xl shadow-sm p-6" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)' }}>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 bg-accent-500 rounded-full animate-pulse"></div>
-            <h3 className="text-lg font-semibold text-gray-900">Engine Vision Matrix</h3>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Engine Vision Matrix</h3>
           </div>
-          <div className="overflow-x-auto bg-gray-50 rounded-xl p-4">
+          <div className="overflow-x-auto rounded-xl p-4" style={{ background: 'var(--bg-base)' }}>
             <img src={debugImage} alt="Engine Vision" className="max-w-none rounded-lg mx-auto" style={{ maxHeight: '300px' }} />
           </div>
-          <p className="text-sm text-gray-500 mt-3 text-center">Processed image visualization showing detected regions</p>
+          <p className="text-sm mt-3 text-center" style={{ color: 'var(--text-secondary)' }}>Processed image visualization showing detected regions</p>
         </div>
       )}
 
       {/* Inference Steps - Full Width */}
       {inferenceSteps.length > 0 && (
-        <div className="mt-6 bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <div className="mt-6 rounded-2xl shadow-sm p-6" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)' }}>
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 bg-secondary-500 rounded-full animate-pulse"></div>
-            <h3 className="text-lg font-semibold text-gray-900">Vector Diagnostic Matrix</h3>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Vector Diagnostic Matrix</h3>
           </div>
           <div className="space-y-4 max-h-96 overflow-y-auto">
             {inferenceSteps.map((wordObj, wIdx) => (
-              <div key={wIdx} className="border border-gray-100 rounded-xl p-4">
-                <p className="text-sm font-medium text-gray-500 mb-2">WORD: {wordObj.word}</p>
+              <div key={wIdx} className="rounded-xl p-4" style={{ background: 'var(--bg-base)', border: '1px solid var(--border-subtle)' }}>
+                <p className="text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>WORD: {wordObj.word}</p>
                 {wordObj.steps && wordObj.steps.map((step, sIdx) => (
                   <div key={sIdx} className="mb-3">
-                    <p className="text-xs text-gray-400 mb-1">Step {step.step}</p>
+                    <p className="text-xs mb-1" style={{ color: 'var(--text-secondary)', opacity: 0.7 }}>Step {step.step}</p>
                     <div className="flex flex-wrap gap-2">
                       {step.top_candidates && step.top_candidates.map((cand, cIdx) => (
                         <div 
                           key={cIdx} 
                           className="flex items-center gap-1 px-2 py-1 rounded-lg text-sm border"
                           style={{ 
-                            borderColor: cIdx === 0 ? getConfColor(cand.confidence) : '#e5e7eb',
-                            backgroundColor: cIdx === 0 ? '#f0fdf4' : '#f9fafb'
+                            borderColor: cIdx === 0 ? getConfColor(cand.confidence) : 'var(--border-subtle)',
+                            backgroundColor: cIdx === 0 ? 'rgba(16, 185, 129, 0.1)' : 'var(--bg-surface)'
                           }}
                         >
-                          <span>{cand.char === '<eos>' ? '⌁' : cand.char}</span>
+                          <span style={{ color: 'var(--text-primary)' }}>{cand.char === '<eos>' ? '⌁' : cand.char}</span>
                           <span 
                             className="text-xs font-medium"
                             style={{ color: getConfColor(cand.confidence) }}
@@ -339,13 +352,21 @@ function App() {
         return <About />;
       case 'team':
         return <TeamMembers />;
+      case 'docs':
+        return <Docs />;
       default:
         return renderHomeSection();
     }
   };
 
+  const handleEngineClick = () => {
+    setActiveSection('home');
+    setShowEngine(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <MainLayout activeSection={activeSection} onSectionChange={setActiveSection}>
+    <MainLayout activeSection={activeSection} onSectionChange={setActiveSection} onEngineClick={handleEngineClick}>
       {renderSection()}
     </MainLayout>
   );

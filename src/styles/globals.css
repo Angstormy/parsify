@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;700;900&display=swap');
 
 @theme {
   --color-primary-50: #eff6ff;
@@ -11,7 +12,7 @@
   --color-primary-700: #1d4ed8;
   --color-primary-800: #1e40af;
   --color-primary-900: #1e3a8a;
-  
+
   --color-secondary-50: #f5f3ff;
   --color-secondary-100: #ede9fe;
   --color-secondary-200: #ddd6fe;
@@ -24,6 +25,37 @@
   --color-secondary-900: #4c1d95;
 }
 
+:root {
+  --bg-base: #f8fafc;
+  --bg-surface: rgba(255, 255, 255, 0.9);
+  --bg-surface-hover: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent-primary: #2563eb;
+  --accent-secondary: #7c3aed;
+  --accent-glow: rgba(37, 99, 235, 0.1);
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-glow: rgba(37, 99, 235, 0.2);
+  --bg-nav: rgba(255, 255, 255, 0.95);
+  --glow-color: rgba(37, 99, 235, 0.25);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+}
+
+[data-theme='dark'] {
+  --bg-base: #050505;
+  --bg-surface: rgba(20, 20, 20, 0.6);
+  --bg-surface-hover: rgba(30, 30, 30, 0.8);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-primary: #00f0ff;
+  --accent-secondary: #8a2be2;
+  --accent-glow: rgba(0, 240, 255, 0.3);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(255, 255, 255, 0.2);
+  --bg-nav: rgba(10, 10, 10, 0.7);
+}
+
 @layer base {
   * {
     margin: 0;
@@ -33,12 +65,121 @@
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: #f8fafc;
-    color: #1e293b;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   #root {
     min-height: 100vh;
   }
+}
+
+/* Floating Pill Nav */
+.floating-nav {
+  position: fixed;
+  left: 50%;
+  z-index: 1000;
+  background: var(--bg-nav);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-nav.scrolled {
+  background: var(--bg-nav);
+  border-color: var(--border-glow);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .floating-nav {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Breathing Line Animation */
+@keyframes breathing-glow {
+  0% { box-shadow: 0 0 5px var(--accent-primary), 0 0 10px var(--glow-color); }
+  50% { box-shadow: 0 0 20px var(--accent-primary), 0 0 30px var(--glow-color); }
+  100% { box-shadow: 0 0 5px var(--accent-primary), 0 0 10px var(--glow-color); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.breathing-line {
+  animation: breathing-glow 3s infinite ease-in-out;
+}
+
+.btn-engine-glow {
+  animation: breathing-glow 3s infinite ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-engine-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite linear;
+  pointer-events: none;
+}
+
+/* Nav Link Styles */
+.nav-link {
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background: var(--border-subtle);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-primary);
+}
+
+/* Logo Hover Effect */
+.logo-hover:hover {
+  transform: scale(1.02);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-glow);
+  border-radius: 4px;
 }

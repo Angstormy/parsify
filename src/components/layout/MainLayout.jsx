@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 
-export default function MainLayout({ children, activeSection, onSectionChange }) {
+export default function MainLayout({ children, activeSection, onSectionChange, onEngineClick }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -18,48 +19,60 @@ export default function MainLayout({ children, activeSection, onSectionChange })
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div className="h-screen bg-gray-50 flex overflow-hidden">
+    <div className="h-screen flex overflow-hidden" style={{ backgroundColor: 'var(--bg-base)' }}>
+      {/* Floating Navbar - Desktop Only */}
+      <Navbar
+        activeSection={activeSection}
+        onSectionChange={onSectionChange}
+        onEngineClick={onEngineClick}
+        isMobile={isMobile}
+      />
+
       {/* Mobile Sidebar Overlay */}
       {isMobile && sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        <div
+          className="fixed inset-0 bg-black/50 z-40"
           onClick={closeSidebar}
         />
       )}
 
-      {/* Sidebar - Hidden on mobile by default, shown when toggled */}
-      <div className={`
-        ${isMobile ? 'fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out' : 'relative'}
-        ${isMobile && !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
-        lg:relative lg:translate-x-0
-      `}>
-        <Sidebar 
-          activeSection={activeSection} 
-          onSectionChange={(section) => {
-            onSectionChange(section);
-            if (isMobile) closeSidebar();
-          }}
-          isMobile={isMobile}
-          onClose={closeSidebar}
-        />
-      </div>
+      {/* Sidebar - Mobile Only */}
+      {isMobile && (
+        <div className={`
+          fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}>
+          <Sidebar
+            activeSection={activeSection}
+            onSectionChange={(section) => {
+              onSectionChange(section);
+              closeSidebar();
+            }}
+            isMobile={isMobile}
+            onClose={closeSidebar}
+          />
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Mobile Header with Hamburger */}
-        <header className="lg:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between flex-shrink-0">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu className="w-6 h-6 text-gray-700" />
-          </button>
-          <span className="font-semibold text-gray-900">Parsify</span>
-          <div className="w-10" />
-        </header>
+        {isMobile && (
+          <header className="px-4 py-3 flex items-center justify-between flex-shrink-0" style={{ backgroundColor: 'var(--bg-surface)', borderBottom: '1px solid var(--border-subtle)' }}>
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: 'var(--text-primary)' }}
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>Parsify</span>
+            <div className="w-10" />
+          </header>
+        )}
 
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-4 lg:p-6 overflow-auto" style={{ paddingTop: isMobile ? '1rem' : '100px' }}>
           {children}
         </main>
       </div>

@@ -1,16 +1,18 @@
-import { 
-  Home, 
-  Info, 
-  Users, 
+import {
+  Home,
+  Info,
+  Users,
   Search,
-  X
+  X,
+  FileText
 } from 'lucide-react';
 import logo from '../../assets/Parsify.png';
 
 const menuItems = [
   { id: 'home', icon: Home, label: 'HOME' },
-  { id: 'about', icon: Info, label: 'About' },
+  { id: 'about', icon: Info, label: 'Architecture' },
   { id: 'team', icon: Users, label: 'Team Members' },
+  { id: 'docs', icon: FileText, label: 'Documentation' },
 ];
 
 export default function Sidebar({ activeSection, onSectionChange, isMobile, onClose }) {
