@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, Globe, Mail, Code, Zap, Database, Brain } from 'lucide-react';
+
+// LinkedIn SVG Icon Component
+const LinkedInIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+);
 
 const teamMembers = [
   {
@@ -9,7 +15,7 @@ const teamMembers = [
     color: "#2563eb",
     bio: "The visionary behind Parsify's core Devanagari recognition engine. Atharva spearheaded the development of our recognition pipeline using a high-precision ResNet 50 architecture. By leveraging deep residual learning, he optimized the model to extract complex spatial features from the Devanagari script, achieving over 98% accuracy.",
     achievement: "Optimized ResNet 50 feature extraction for low-resource Hindi datasets.",
-    icon: <Zap size={20} />
+    linkedIn: "https://www.linkedin.com/in/atharva--salunke/"
   },
   {
     name: "Omkar",
@@ -18,7 +24,7 @@ const teamMembers = [
     color: "#7c3aed",
     bio: "A master of modern web aesthetics, Omkar designed the seamless, 'Sophisticated Slate' interface that defines the Parsify experience. He specializes in creating high-performance, accessible, and motion-rich UIs that make complex AI tasks feel effortless. His 'Bento-Box' layout system provides clarity for professional document management.",
     achievement: "Implemented a custom 3D animation engine for the entire platform.",
-    icon: <Code size={20} />
+    linkedIn: "https://www.linkedin.com/in/omkarvijaybagade/"
   },
   {
     name: "Shirish",
@@ -27,7 +33,7 @@ const teamMembers = [
     color: "#00f0ff",
     bio: "Shirish is the backbone of Parsify's infrastructure. He engineered our distributed backend architecture using FastAPI and optimized model serving through Docker and Kubernetes. His focus on security and high-availability ensures that Parsify can handle thousands of concurrent document scans without downtime.",
     achievement: "Architected a zero-downtime deployment pipeline for ML models.",
-    icon: <Database size={20} />
+    linkedIn: "https://www.linkedin.com/in/shirish-goyal-488a28260/"
   },
   {
     name: "Shivansh",
@@ -36,7 +42,7 @@ const teamMembers = [
     color: "#ec4899",
     bio: "Shivansh leads the English language OCR division, focusing on high-precision recognition for diverse document types. By implementing advanced beam-search decoding and custom image preprocessing pipelines, he significantly improved recognition for complex handwritten annotations and degraded documents.",
     achievement: "Achieved state-of-the-art results on the ICDAR handwriting dataset.",
-    icon: <Brain size={20} />
+    linkedIn: "https://www.linkedin.com/in/shivanshprakash/"
   }
 ];
 
@@ -105,16 +111,21 @@ const TeamMemberCard = ({ member, isMobile }) => {
         marginTop: '8px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px', opacity: 0.5 }}>
-          {member.icon}
           <span style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase' }}>Achievement</span>
         </div>
         <p style={{ color: 'var(--text-primary)', fontSize: '0.8rem', fontWeight: 500 }}>{member.achievement}</p>
       </div>
 
       <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-        <button className="social-icon-btn"><User size={16} /></button>
-        <button className="social-icon-btn"><Globe size={16} /></button>
-        <button className="social-icon-btn"><Mail size={16} /></button>
+        <a 
+          href={member.linkedIn} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="linkedin-icon-btn"
+          style={{ textDecoration: 'none' }}
+        >
+          <LinkedInIcon />
+        </a>
       </div>
     </div>
   );
@@ -157,22 +168,22 @@ const TeamPage = () => {
       </div>
       
       <style>{`
-        .social-icon-btn {
+        .linkedin-icon-btn {
           background: transparent;
           border: 1px solid var(--border-subtle);
-          padding: 8px;
+          padding: 10px;
           border-radius: 10px;
           cursor: pointer;
           color: var(--text-secondary);
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
         }
-        .social-icon-btn:hover {
-          background: var(--bg-surface-hover);
-          color: var(--text-primary);
-          border-color: var(--accent-primary);
+        .linkedin-icon-btn:hover {
+          background: #0077b5;
+          border-color: #0077b5;
+          color: white;
           transform: translateY(-2px);
         }
       `}</style>
