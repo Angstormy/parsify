@@ -27,7 +27,14 @@ const DiagnosticMatrix = ({ steps }) => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {wordObj.steps && wordObj.steps.map((step, sIdx) => (
                 <div key={`${wIdx}-${sIdx}`} className="diagnostic-row" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', padding: '12px', borderRadius: '8px' }}>
-                  <div style={{ color: 'var(--text-secondary)', minWidth: '40px', fontWeight: 'bold' }}>S{step.step}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', minWidth: '80px' }}>
+                    <div style={{ color: 'var(--text-secondary)', fontWeight: 'bold' }}>S{step.step}</div>
+                    {step.duration_sec && (
+                      <div style={{ fontSize: '0.7rem', color: 'var(--accent-secondary)', opacity: 0.8 }}>
+                        {step.duration_sec.toFixed(4)}s
+                      </div>
+                    )}
+                  </div>
                   
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                     {step.top_candidates && step.top_candidates.map((cand, cIdx) => (

@@ -273,6 +273,20 @@ const OcrEngine = () => {
           </div>
         )}
 
+        {prediction && inferenceSteps.length > 0 && (
+          <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', gap: '12px', padding: '0 8px', animation: 'fadeIn 0.5s ease' }}>
+            <div style={{ height: '1px', flex: 1, background: 'linear-gradient(to right, var(--accent-primary), transparent)', opacity: 0.3 }}></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-primary)', boxShadow: '0 0 10px var(--accent-primary)' }}></div>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+                Neural processing finalized in <span style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>
+                  {(inferenceSteps.reduce((t, w) => t + (w.steps?.reduce((st, s) => st + (s.duration_sec || 0), 0) || 0), 0)).toFixed(4)}s
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Debug Matrix Area */}
         {(debugImage || inferenceSteps.length > 0) && (
           <div style={{ marginTop: '48px' }}>
