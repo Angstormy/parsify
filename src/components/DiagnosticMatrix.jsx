@@ -9,16 +9,11 @@ const DiagnosticMatrix = ({ steps }) => {
   };
 
   return (
-    <div className="glass-panel" style={{ background: 'rgba(10, 10, 15, 0.9)', padding: '0', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
+    <div className="glass-panel diagnostic-panel" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
       {/* Terminal Header */}
-      <div style={{ background: 'rgba(0,0,0,0.5)', padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border-subtle)' }}>
+      <div className="diagnostic-header" style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid var(--border-subtle)' }}>
         <Terminal size={18} color="var(--text-secondary)" />
         <span style={{ fontFamily: 'monospace', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>parsify/vector-diagnostics.sh</span>
-        <div style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444' }}></div>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b' }}></div>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981' }}></div>
-        </div>
       </div>
 
       {/* Matrix Body */}
@@ -31,14 +26,14 @@ const DiagnosticMatrix = ({ steps }) => {
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {wordObj.steps && wordObj.steps.map((step, sIdx) => (
-                <div key={`${wIdx}-${sIdx}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', background: 'rgba(255,255,255,0.02)', padding: '12px', borderRadius: '8px' }}>
+                <div key={`${wIdx}-${sIdx}`} className="diagnostic-row" style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', padding: '12px', borderRadius: '8px' }}>
                   <div style={{ color: 'var(--text-secondary)', minWidth: '40px', fontWeight: 'bold' }}>S{step.step}</div>
                   
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                     {step.top_candidates && step.top_candidates.map((cand, cIdx) => (
-                      <div key={cIdx} style={{ 
-                        border: `1px solid ${cIdx === 0 ? getConfColor(cand.confidence) : 'transparent'}`,
-                        background: 'rgba(0,0,0,0.3)', padding: '6px 12px', borderRadius: '6px',
+                      <div key={cIdx} className="diagnostic-candidate" style={{ 
+                        border: `1px solid ${cIdx === 0 ? getConfColor(cand.confidence) : 'var(--border-subtle)'}`,
+                        padding: '6px 12px', borderRadius: '6px',
                         display: 'flex', alignItems: 'center', gap: '12px'
                       }}>
                         <span style={{ fontSize: '1.125rem', color: 'var(--text-primary)' }}>{cand.char === '<eos>' ? '⌁' : cand.char}</span>

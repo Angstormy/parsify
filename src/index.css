@@ -521,3 +521,36 @@ h4 {
     transform: translateY(0);
   }
 }
+
+/* Diagnostic Matrix Theme Styles */
+.diagnostic-panel {
+  background: rgba(10, 10, 15, 0.9);
+}
+
+[data-theme='light'] .diagnostic-panel {
+  background: var(--bg-surface);
+}
+
+.diagnostic-header {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='light'] .diagnostic-header {
+  background: var(--bg-surface-hover);
+}
+
+.diagnostic-row {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme='light'] .diagnostic-row {
+  background: rgba(15, 23, 42, 0.03);
+}
+
+.diagnostic-candidate {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='light'] .diagnostic-candidate {
+  background: var(--bg-base);
+}

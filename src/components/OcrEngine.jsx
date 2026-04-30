@@ -267,7 +267,7 @@ const OcrEngine = () => {
                 {copied ? 'Copied' : 'Copy Text'}
               </button>
             </div>
-            <div style={{ fontSize: isMobile ? '1.25rem' : '1.75rem', lineHeight: 1.4, color: 'var(--text-primary)', wordBreak: 'break-word', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>
+            <div style={{ fontSize: isMobile ? (lang === 'hindi' ? '2.5rem' : '2.25rem') : (lang === 'hindi' ? '2.25rem' : '1.75rem'), lineHeight: 1.4, color: 'var(--text-primary)', wordBreak: 'break-word', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>
               {prediction}
             </div>
           </div>
