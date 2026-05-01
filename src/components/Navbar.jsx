@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Sun, Moon, Menu, X } from 'lucide-react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Sun, Moon, Menu, X, BookOpen } from 'lucide-react';
 
 const Navbar = ({ onEngineClick, onHomeClick }) => {
+  const location = useLocation();
+  const isDocsPage = location.pathname.startsWith('/docs');
   const [theme, setTheme] = useState(localStorage.getItem('parsify-theme') || 'dark');
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -161,16 +163,44 @@ const Navbar = ({ onEngineClick, onHomeClick }) => {
         {/* Mobile Actions */}
         {isMobile && (
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {isDocsPage && (
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('toggle-docs-sidebar'))}
+                style={{ 
+                  background: 'var(--bg-surface-hover)', 
+                  border: '1px solid var(--border-subtle)', 
+                  color: 'var(--accent-primary)', 
+                  padding: '8px', 
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer'
+                }}
+                title="Toggle Documentation Menu"
+              >
+                <BookOpen size={20} />
+              </button>
+            )}
             <button 
               onClick={toggleTheme} 
               style={{ 
                 background: 'transparent', 
                 border: 'none', 
                 color: theme === 'dark' ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                padding: '8px'
+                padding: '8px',
+                cursor: 'pointer'
               }}
             >
-              {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
+              <div style={{ 
+                transform: `rotate(${theme === 'dark' ? '0deg' : '360deg'}) scale(${theme === 'dark' ? 1 : 1})`, 
+                transition: 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
+              </div>
             </button>
             <button 
               onClick={toggleMenu}

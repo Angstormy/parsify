@@ -7,12 +7,7 @@ const DocsSidebar = ({ docs, activeDocId, setActiveDocId }) => {
 
   return (
     <aside style={{
-      width: '320px',
-      borderRight: '1px solid var(--border-subtle)',
-      height: 'calc(100vh - 100px)',
-      position: 'sticky',
-      top: '100px',
-      overflowY: 'auto',
+      width: '100%',
       padding: '32px 24px',
       background: 'transparent'
     }}>
