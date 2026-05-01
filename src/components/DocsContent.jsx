@@ -43,10 +43,10 @@ const CustomPre = ({ children, ...props }) => {
           onClick={handleCopy}
           style={{
             background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid var(--border-subtle)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
             borderRadius: '6px',
             padding: '4px 10px',
-            color: 'var(--text-primary)',
+            color: '#ffffff',
             fontSize: '0.75rem',
             cursor: 'pointer',
             display: 'flex',
